@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>打砖块</title>
+</head>
+<style>
+    canvas {
+        outline: coral 1px solid;
+    }
+</style>
+
+<body>
+    <div class="debug-input">
+        <input type="range" value="30" name="fps" id="id-fps" max="60" min="1">
+        fps:<span class=""></span>
+    </div>
+
+    <script src="utlis.js"></script>
+    <script src="taogame.js"></script>
+    <script src="sprite.js"></script>
+    <script src="paddle.js"></script>
+    <script src="ball.js"></script>
+    <script src="block.js"></script>
+
+    <script>
+        let divs = document.querySelectorAll('.debug-input')
+        for (let div of divs) {
+            let input = div.querySelector('input')
+            let span = div.querySelector('span')
+            let value = input.value
+            span.innerText = value
+
+            div.addEventListener('input', () => {
+                let value = input.value
+                span.innerText = value
+            })
+        }
+    </script>
+
+    <script>
+        let images = {
+            ball: 'ball1.png',
+            paddle: 'paddle.png',
+            block: 'block.png',
+        }
+        game = new TaoGame(400, 300, images)
+        game.debugMode = true
+
+        paddle = new Paddle(110, 280, 'paddle', game)
+        ball = new Ball(150, 240, 'ball', game)
+        blocks = []
+        for (let i = 0; i < 3; i++) {
+            let x = 100 * i + 10
+            let y = 50
+            let block = new Block(x, y, 'block', game)
+            blocks.push(block)
+            game.whenCollided(block, ball, function () {
+                ball.reverse()
+                block.hitted()
+                log('hitted')
+            })
+        }
+        game.addSprites(blocks)
+        // b1 = new Block(110, 50, 'block', game)
+        // b2 = new Block(200, 50, 'block', game)
+        game.addSprites(paddle)
+        game.addSprites(ball)
+        // game.addSprites([b1, b2])
+
+        game.whenCollided(paddle, ball, function () {
+            ball.reverseY()
+
+            log('collide')
+        })
+
+        // game.whenCollided(b1, ball, function () {
+        //     ball.reverse()
+        //     b1.hitted()
+        //     log('collide')
+        // })
+
+        game.runWithScene()
+    </script>
+</body>
+
+</html>
