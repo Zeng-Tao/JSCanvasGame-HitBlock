@@ -23,6 +23,8 @@
     <script src="game/paddle.js"></script>
     <script src="game/ball.js"></script>
     <script src="game/block.js"></script>
+    <script src="game/scenes/scene.js"></script>
+    <script src="game/scenes/play.js"></script>
 
     <script>
         let divs = document.querySelectorAll('.debug-input')
@@ -47,41 +49,8 @@
         }
         game = new TaoGame(400, 300, images)
         game.debugMode = true
-
-        paddle = new Paddle(110, 280, 'paddle', game)
-        ball = new Ball(150, 240, 'ball', game)
-        blocks = []
-        for (let i = 0; i < 3; i++) {
-            let x = 100 * i + 10
-            let y = 50
-            let block = new Block(x, y, 'block', game)
-            blocks.push(block)
-            game.whenCollided(block, ball, function () {
-                ball.reverse()
-                block.hitted()
-                log('hitted')
-            })
-        }
-        game.addSprites(blocks)
-        // b1 = new Block(110, 50, 'block', game)
-        // b2 = new Block(200, 50, 'block', game)
-        game.addSprites(paddle)
-        game.addSprites(ball)
-        // game.addSprites([b1, b2])
-
-        game.whenCollided(paddle, ball, function () {
-            ball.reverseY()
-
-            log('collide')
-        })
-
-        // game.whenCollided(b1, ball, function () {
-        //     ball.reverse()
-        //     b1.hitted()
-        //     log('collide')
-        // })
-
-        game.runWithScene()
+        play = new Play(game)
+        game.runWithScene(play)
     </script>
 </body>
 

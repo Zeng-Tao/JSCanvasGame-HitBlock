@@ -10,10 +10,6 @@ class TaoGame {
         this.pause = false
         this.canvas = null
         this.context = null
-        this.actions = {}
-        this.keys = {}
-        this.sprites = []
-        this.collidPairs = []
         // 对象 ID
         this.id = 0
         this.init()
@@ -38,8 +34,8 @@ class TaoGame {
         var self = this
         window.addEventListener('keydown', function (evet) {
             let k = evet.key
-            if (self.keys.hasOwnProperty(k)) {
-                self.keys[k] = true
+            if (self.scene.keys.hasOwnProperty(k)) {
+                self.scene.keys[k] = true
             }
             // degub
             if (self.debugMode) {
@@ -50,10 +46,15 @@ class TaoGame {
         })
         window.addEventListener('keyup', function (evet) {
             let k = evet.key
-            if (self.keys.hasOwnProperty(k)) {
-                self.keys[k] = false
+            if (self.scene.keys.hasOwnProperty(k)) {
+                self.scene.keys[k] = false
             }
         })
+        // debug
+        if (this.debugMode) {
+            this.debug()
+        }
+
     }
 
     debug() {
@@ -84,12 +85,12 @@ class TaoGame {
 
     whenCollided(a, b, callback) {
         let pair = [a, b, callback]
-        this.collidPairs.push(pair)
+        this.scene.collidPairs.push(pair)
     }
 
     registerEvent(key, callback) {
-        this.keys[key] = false
-        this.actions[key] = callback
+        this.scene.keys[key] = false
+        this.scene.actions[key] = callback
     }
 
     drawSprite(sprite) {
@@ -103,70 +104,35 @@ class TaoGame {
         if (sprites instanceof Sprite) {
             sprites.id = this.id
             this.id += 1
-            this.sprites.push(sprites)
+            this.scene.sprites.push(sprites)
             return
         }
 
         for (let s of sprites) {
             s.id = this.id + 1
             this.id += 1
-            this.sprites.push(s)
-        }
-    }
-
-    drawSprites() {
-        for (let s of this.sprites) {
-            s.draw()
+            this.scene.sprites.push(s)
         }
     }
 
     draw() {
-        this.drawSprites()
+
     }
 
     update() {
         if (this.pause) {
             return
         }
-        // 监测碰撞事件
-        for (let pair of this.collidPairs) {
-            let a = pair[0]
-            let b = pair[1]
-            let callback = pair[2]
-            if (this.isCollided(a, b)) {
-                callback()
-            }
-        }
-
-        if (this.debugMode) {
-            this.debug()
-        }
-        // 响应按键事件
-        for (let k in this.keys) {
-            if (this.keys[k] === true) {
-                this.actions[k]()
-            }
-        }
-        // 更新状态
-        var sprites = this.sprites
-        for (let s of sprites) {
-            if (s.die) {
-                let index = sprites.indexOf(s)
-                sprites.splice(index, 1)
-                continue
-            }
-            s.update && s.update()
-        }
-        this.sprites = sprites
-
     }
 
     runloop() {
         var self = this
+        // 清空画布
+        self.context.clearRect(0, 0, this.width, this.height)
 
         self.update()
-        self.context.clearRect(0, 0, this.width, this.height)
         self.draw()
+        self.scene.run()
         log('runloog')
 
         setTimeout(function () {
@@ -174,9 +140,11 @@ class TaoGame {
         }, 1000 / self.fps)
     }
 
-    runWithScene() {
+    runWithScene(scene, callback) {
         var g = this
-        // this.scene = scene
+        g.scene = scene
+        g.scene.setup()
+        // callback()
         // 开始运行程序
         setTimeout(function () {
             g.runloop()
