@@ -17,12 +17,12 @@
         fps:<span class=""></span>
     </div>
 
-    <script src="utlis.js"></script>
-    <script src="taogame.js"></script>
-    <script src="sprite.js"></script>
-    <script src="paddle.js"></script>
-    <script src="ball.js"></script>
-    <script src="block.js"></script>
+    <script src="game/utlis.js"></script>
+    <script src="game/taogame.js"></script>
+    <script src="game/sprite.js"></script>
+    <script src="game/paddle.js"></script>
+    <script src="game/ball.js"></script>
+    <script src="game/block.js"></script>
 
     <script>
         let divs = document.querySelectorAll('.debug-input')
@@ -41,9 +41,9 @@
 
     <script>
         let images = {
-            ball: 'ball1.png',
-            paddle: 'paddle.png',
-            block: 'block.png',
+            ball: 'images/ball1.png',
+            paddle: 'images/paddle.png',
+            block: 'images/block.png',
         }
         game = new TaoGame(400, 300, images)
         game.debugMode = true
