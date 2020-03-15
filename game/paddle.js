@@ -1,7 +1,7 @@
 class Paddle extends Sprite {
     // constructor
-    constructor(x, y, path, game) {
-        super(x, y, path, game)
+    constructor(status, game) {
+        super(status, game)
         this.speed = 10
         this.setup()
     }

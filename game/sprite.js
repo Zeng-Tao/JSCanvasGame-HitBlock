@@ -1,9 +1,7 @@
 class Sprite {
     // constructor
-    constructor(x, y, name, game) {
-        this.name = name
+    constructor(status, game) {
         this.game = game
-        this.hp = 1
         this.die = false
         this.id = null
         this.image = null
@@ -11,13 +9,14 @@ class Sprite {
         this.height = null
         this.centerX = null
         this.centerY = null
-        this.init(x, y)
+        this.init(status)
     }
 
-    init(x, y) {
-        this.x = x
-        this.y = y
-
+    init(status) {
+        this.x = status['x']
+        this.y = status['y']
+        this.name = status['name']
+        this.hp = status['hp']
         this.image = this.game.getImage(this.name)
 
         var self = this

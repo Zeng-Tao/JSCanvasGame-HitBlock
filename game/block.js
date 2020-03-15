@@ -1,7 +1,7 @@
 class Block extends Sprite {
     // constructor
-    constructor(x, y, path, game) {
-        super(x, y, path, game)
+    constructor(status, game) {
+        super(status, game)
         this.setup()
     }
 
@@ -13,7 +13,6 @@ class Block extends Sprite {
     }
 
     setup() {
-        this.hp = 1
     }
 
     update() {

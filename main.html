@@ -13,8 +13,12 @@
 
 <body>
     <div class="debug-input">
-        <input type="range" value="30" name="fps" id="id-fps" max="60" min="1">
+        <input type="range" value="20" name="fps" id="id-fps" max="60" min="1">
         fps:<span class=""></span>
+    </div>
+
+    <div id="ctrol">
+        <button id="stop-or-not">暂停/继续</button>
     </div>
 
     <script src="game/utlis.js"></script>
@@ -23,8 +27,11 @@
     <script src="game/paddle.js"></script>
     <script src="game/ball.js"></script>
     <script src="game/block.js"></script>
+    <script src="game/map.js"></script>
     <script src="game/scenes/scene.js"></script>
+    <script src="game/scenes/home.js"></script>
     <script src="game/scenes/play.js"></script>
+    <script src="game/scenes/edit.js"></script>
 
     <script>
         let divs = document.querySelectorAll('.debug-input')
@@ -39,18 +46,37 @@
                 span.innerText = value
             })
         }
+
+        let b = e('#stop-or-not')
+        if (window.pause) {
+            b.innerText = '继续'
+        } else {
+            b.innerText = '暂停'
+        }
+        b.addEventListener('click', function () {
+            window.pause = !window.pause
+            if (window.pause) {
+                b.innerText = '继续'
+            } else {
+                b.innerText = '暂停'
+            }
+        })
     </script>
 
     <script>
         let images = {
             ball: 'images/ball1.png',
             paddle: 'images/paddle.png',
-            block: 'images/block.png',
+            block1: 'images/block1.png',
+            block2: 'images/block2.png',
+            block3: 'images/block3.png',
         }
-        game = new TaoGame(400, 300, images)
+        game = new TaoGame(400, 300, images, maps)
         game.debugMode = true
-        play = new Play(game)
-        game.runWithScene(play)
+        // s = new Play('play', game)
+        s = new Home('home', game)
+        // s = new Edit('edit', game)
+        game.runWithScene(s)
     </script>
 </body>
 
